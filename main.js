@@ -13,11 +13,20 @@ btn.addEventListener("click", function () {
     //ved ourRequest.open, så skal du skrive GET hvis du vil hente data, og POST hvis du vil skrive data
     ourRequest.open('GET', 'https://learnwebcode.github.io/json-example/animals-' + pageCounter +'.json');
     ourRequest.onload = function () {
-        //JSON.parse laver vores JSON til objekter i stedet for bare rå tekst. Jeg går ud fra den separerer ved start { og slut }, og gør det til 1 objekt.
-        var ourData = JSON.parse(ourRequest.responseText);
-        renderHTML(ourData);
+        if (ourRequest.status >= 200 &&  ourRequest.status < 400) {
+            //JSON.parse laver vores JSON til objekter i stedet for bare rå tekst. Jeg går ud fra den separerer ved start { og slut }, og gør det til 1 objekt.
+            var ourData = JSON.parse(ourRequest.responseText);
+            renderHTML(ourData);
+        }
+        else {
+            console.log("We connected to the server, but it returned an error.");
+        }
     };
     
+    ourRequest.onerror = function () {
+        console.log("Connection error");
+    };
+
     //ourRequet.send, sender bare den request som vi har lavet ovenover. Så det er bare en slags, Send/Apply/Try knap. Her går vi jo bare ud fra at den virker, og at vi får den data vi ønsker.
     //husk .send er en metode der hører til XMLHttpRequest.
     ourRequest.send();
